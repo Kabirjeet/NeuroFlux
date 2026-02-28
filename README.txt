@@ -1,3 +1,10 @@
+Type commands in terminal:
+cd Frontend/NeuroFlux
+npm install 
+
+Then npm run dev will work
+
+
 npm create vite@latest
 
 
