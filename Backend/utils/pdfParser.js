@@ -1,8 +1,10 @@
 import fs from 'fs/promises';
-import { createRequire } from 'module';
+import { PDFParse } from "pdf-parse";
 
-const require = createRequire(import.meta.url);
-const pdf = require('pdf-parse');
+// import { createRequire } from 'module';
+
+// const require = createRequire(import.meta.url);
+// const pdf = require('pdf-parse');
 
 /**
  * Extract text from PDF file
@@ -13,7 +15,9 @@ const pdf = require('pdf-parse');
 export const extractTextFromPDF = async (filePath) => {
     try {
         const dataBuffer = await fs.readFile(filePath);
-        const data = await pdf(dataBuffer);
+        // pdf-parse expects a Unit8Array, not a Buffer
+        const parser = new PDFParse(new Uint8Array(dataBuffer));
+        const data = await parser.getText();
 
         return {
             text: data.text,
@@ -21,7 +25,7 @@ export const extractTextFromPDF = async (filePath) => {
             info: data.info
         };
     } catch (error) {
-        console.error('Error extracting text from PDF:', error);
+        console.error('PDF parsing error:', error);
         throw new Error('Failed to extract text from PDF');
     }
 };

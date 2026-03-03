@@ -43,10 +43,10 @@ export const uploadDocument = async(req, res, next) =>{
         const document = await Document.create({
             userId:req.user._id,
             title,
-            fileName : req.file.originalname,
-            filePath : fileURL, // Store the URL instead of the local path
-            fileSize : req.file.size,
-            status : 'processing'
+            fileName: req.file.originalname,
+            filePath: fileURL, // Store the URL instead of the local path
+            fileSize: req.file.size,
+            status: 'processing'
 
         });
 
@@ -78,8 +78,10 @@ export const uploadDocument = async(req, res, next) =>{
 
 const processPDF = async(documentId,filePath) =>{
     try {
-        const result = await extractTextFromPDF(filePath);
-        const text = result.text;
+        // const result = await extractTextFromPDF(filePath);
+        // const text = result.text;
+
+        const { text } = await extractTextFromPDF(filePath);
 
         // Create chunks
 
@@ -101,7 +103,7 @@ const processPDF = async(documentId,filePath) =>{
             status: 'failed',
         });
     }
-}
+};
 
 // @desc Get all user documents 
 // @route GET /api/documents
@@ -136,6 +138,14 @@ export const getDocuments = async(req, res, next) =>{
                 }
             },
             {
+                $project: {
+                    extractedText: 0,
+                    chunks: 0,
+                    flashcardSets: 0,
+                    quizzes: 0
+                }
+            },
+            {
                 $sort: {
                     uploadDate: -1
                 }
@@ -161,40 +171,36 @@ export const getDocuments = async(req, res, next) =>{
 
 export const getDocument = async(req, res, next) =>{
     try{
-        // const document = await Document.findOne({
-        //     _id : req.params.id,
-        //     userId : req.user._id
-        // });
+        const document = await Document.findOne({
+            _id: req.params.id,
+            userId: req.user._id
+        });
 
-        // if(!document){
-        //     return res.status(404).json({
-        //         success : false,
-        //         error : "Document not found",
-        //         statusCode : 404
-        //     });
-        // }
+        if(!document) {
+            return res.status(404).json({
+                success: false,
+                error: 'Document not found',
+                statusCode: 404
+            });
+        }
 
-        // // Get counts of associated flashcards and quizzes
+        //Get counts of associated flashcards and quizzes
+        const flashcardCount = await Flashcard.countDocuments({ documentId: document._id, userId: req.user._id });
+        const quizCount = await Quiz.countDocuments({ documentId: document._id, userId: req.user._id });
 
-        // const flashcardCount = await Flashcard.countDocuments({documentId : document._id,userId:req.user._id});
-        // const quizCount = await Quiz.countDocuments({documentId : document._id,userId:req.user._id});
+        // Update last accessed
+        document.lastAccessed = Date.now();
+        await document.save();
 
-        // // Update last accessed
+        // Combine document data with counts
+        const documentData = document.toObject();
+        documentData.flashcardCount = flashcardCount;
+        documentData.quizCount = quizCount;
 
-        // document.lastAccessed = Date.now();
-        // await document.save();
-
-        // // Combine document data with counts
-
-        // const documentData = document.toObject();
-        // documentData.flashcardCount = flashcardCount;
-        // documentData.quizCount = quizCount;
-
-        // res.status(200).json({
-        //     success : true,
-        //     data : documentData
-        // });
-
+        res.status(200).json({
+            success: true,
+            data: documentData
+        });
     } catch(error){
         next(error);
     }
@@ -226,7 +232,7 @@ export const deleteDocument = async(req, res, next) =>{
 
         // Delete document
 
-        await Document.deleteOne({_id: document._id});
+        await Document.deleteOne();
 
         res.status(200).json({
             success : true,
@@ -239,5 +245,3 @@ export const deleteDocument = async(req, res, next) =>{
     }
 
 };
-
-
