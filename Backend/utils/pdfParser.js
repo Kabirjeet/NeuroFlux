@@ -1,5 +1,8 @@
-import fs from 'fs/promises'
-import * as pdf from 'pdf-parse'
+import fs from 'fs/promises';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pdf = require('pdf-parse');
 
 /**
  * Extract text from PDF file
@@ -7,12 +10,12 @@ import * as pdf from 'pdf-parse'
  * @returns {Promise<{text: string, numPages: number}>}
  */
 
-export const extractTextFromPDF = async(filePath) =>{
-    try{
+export const extractTextFromPDF = async (filePath) => {
+    try {
         const dataBuffer = await fs.readFile(filePath);
-        const data = await pdf.default(dataBuffer);
+        const data = await pdf(dataBuffer);
 
-        return{
+        return {
             text: data.text,
             numPages: data.numpages,
             info: data.info
@@ -21,4 +24,5 @@ export const extractTextFromPDF = async(filePath) =>{
         console.error('Error extracting text from PDF:', error);
         throw new Error('Failed to extract text from PDF');
     }
-}
+};
+
