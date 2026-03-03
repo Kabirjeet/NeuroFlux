@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from './apiPaths';
+import { BASE_URL } from './apiPath';
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -34,8 +34,8 @@ axiosInstance.interceptors.response.use(
             }   else if (error.code === "ECONNABORTED") {
                 console.error('Request timeout');
             }
-            return Promise.reject(error);
         }
+        return Promise.reject(error);
     }
 );
 
