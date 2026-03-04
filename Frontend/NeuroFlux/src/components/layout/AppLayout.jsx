@@ -1,9 +1,9 @@
 import React,{useState}from 'react'
-import Sidebar from './Sidebar'
+// import Sidebar from './Sidebar'  
 import Header from './Header'
 
-const AppLayout = ({childern}) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(flase);
+const AppLayout = ({children}) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -14,7 +14,7 @@ const AppLayout = ({childern}) => {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header toggleSidebar={toggleSidebar}/>
         <main className='flex-1 overflow-x-hidden overflow-y-auto p-4'>
-          {childern}
+          {children}
         </main>
       </div>
     </div>
