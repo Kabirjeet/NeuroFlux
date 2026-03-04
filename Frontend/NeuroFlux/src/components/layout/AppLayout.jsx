@@ -1,5 +1,5 @@
 import React,{useState}from 'react'
-// import Sidebar from './Sidebar'  
+import Sidebar from './Sidebar'
 import Header from './Header'
 
 const AppLayout = ({children}) => {

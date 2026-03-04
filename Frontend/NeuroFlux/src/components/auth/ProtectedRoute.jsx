@@ -1,5 +1,5 @@
 import React from 'react'
-import AppLayout from '../layout/AppLayout';
+// import AppLayout from '../layout/AppLayout';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 

@@ -13,13 +13,15 @@ const axiosInstance = axios.create({
 // REQueST interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
-        const accessToken = localStorage.getItem('token');
+        const accessToken = localStorage.getItem("token");
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        return Promise.reject(error)
+    }
 );
 
 // response interceptor
