@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {useAuth} from '../../context/AuthContext';
 import { LayoutDashboard, FileText, User, LogOut, BrainCircuit, BookOpen, X } from 'lucide-react';
 
-const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggle }) => {
 
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -22,33 +22,35 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
   return (
     <>
+      {/* Mobile Overlay */}
       <div
         className={`fixed inset-0 bg-black/30 z-40 md:hidden transition-opacity duration-300 ${
-          isSidebarOpen
+          isOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
         }`}
-        onClick={toggleSidebar}
+        onClick={toggle}
         aria-hidden="true"
       ></div>
 
+      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-full w-64 bg-white/80 backdrop-blur-lg border-r border-slate-200/60 z-50 transform transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0`}
       >
 
         {/* Logo and Close Button */}
-        <div className=''>
-          <div className=''>
-            <div className=''>
-              <BrainCircuit size={20} strokeWidth={2.5} />
+        <div className='flex items-center justify-between p-4 border-b border-slate-200/60'>
+          <div className='flex items-center gap-3'>
+            <div className='w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30'>
+              <BrainCircuit size={20} strokeWidth={2.5} className='text-white' />
             </div>
-            <h1 className=''>AI learning Assistant</h1>
+            <h1 className='text-lg font-semibold text-slate-900'>NeuroFlux</h1>
           </div>
           <button
-            onClick={toggleSidebar}
-            className='md:hidden absolute top-4 right-4 p-2 rounded-md text-slate-600 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500'
+            onClick={toggle}
+            className='md:hidden p-2 rounded-md text-slate-600 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500'
             aria-label='Close sidebar'
           >
             <X size={20} />
@@ -56,15 +58,21 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         </div>
 
         {/* Navigation Links */}
-        <nav className='mt-10 flex flex-col gap-2 px-4'>
+        <nav className='mt-6 flex flex-col gap-1 px-3'>
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
+              onClick={() => {
+                // Close sidebar on mobile when nav link is clicked
+                if (window.innerWidth < 768) {
+                  toggle();
+                }
+              }}
               className={({ isActive }) =>
-                `group flex items-center gap-3 px-4 py-2 rounded-md transition-colors duration-200 ${
+                `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                   isActive
-                    ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`
               }
@@ -72,7 +80,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               {({ isActive }) => (
                 <>
                   <link.icon
-                    size={18}
+                    size={20}
                     strokeWidth={2}
                     className={`transition-transform duration-200 ${
                       isActive
@@ -80,7 +88,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                         : 'group-hover:translate-x-1'
                     }`}
                   />
-                  {link.text}
+                  <span className='font-medium'>{link.text}</span>
                 </>
               )}
             </NavLink>
@@ -88,17 +96,16 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         </nav>
 
         {/* Logout Button */}
-        <div className=''>
+        <div className='absolute bottom-6 left-0 right-0 px-3'>
           <button
             onClick={handleLogout}
-            className=''
+            className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200'
           >
             <LogOut
-              size={18}
-              strokeWidth={2.5}
-              className=''
+              size={20}
+              strokeWidth={2}
             />
-            Logout
+            <span className='font-medium'>Logout</span>
           </button>
         </div>
 
