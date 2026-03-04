@@ -29,7 +29,7 @@ const RegisterPage = () => {
     setError('');
     try {
       await authService.register(username, email, password);
-      toast.success("Registered in successfully! Please login to continue.");
+      toast.success("Registered successfully! Please login to continue.");
       navigate('/login');
     } catch (err) {
       const errorMessage = err?.response?.data?.error || err?.message || "Registration failed. Try again.";
@@ -169,7 +169,7 @@ const RegisterPage = () => {
             </div>
           </div>
           {/*Subtle footer text  */}
-          <p className='text-center text-xs text-slate-500 mt-8'>© 2024 NeuroFlux. All rights reserved.</p>
+          <p className='text-center text-xs text-slate-500 mt-8'>© 2026 NeuroFlux. All rights reserved.</p>
         </div>
       </div>
       </div>

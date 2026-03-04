@@ -137,7 +137,7 @@ const LoginPage = () => {
         </div>
 
         {/*Subtle footer text  */}
-        <p className='text-center text-xs text-slate-500 mt-8'>© 2024 NeuroFlux. All rights reserved.</p>
+        <p className='text-center text-xs text-slate-500 mt-8'>© 2026 NeuroFlux. All rights reserved.</p>
       </div>
       </div>
   )
