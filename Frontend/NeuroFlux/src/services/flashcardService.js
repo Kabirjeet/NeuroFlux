@@ -53,6 +53,10 @@ const flashcardService = {
     reviewFlashcard,
     toggleStar,
     deleteFlashcardSet,
+    // Aliases for easier use
+    getAllFlashcards: getAllFlashcardSets,
+    getFlashcardsByDocument: getFlashcardsForDocument,
+    deleteFlashcard: deleteFlashcardSet,
 };
 
-export default flashcardService;;
+export default flashcardService;

@@ -39,10 +39,10 @@ const DashBoardPage = () => {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
-          <div className='w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4'>
-            <TrendingUp className='w-8 h-8 text-red-500' />
+          <div className='w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4'>
+            <TrendingUp className="w-8 h-8 text-red-400" />
           </div>
-          <p className='text-slate-600'>{error}</p>
+          <p className='text-dark-400'>{error}</p>
         </div>
       </div>
     )
@@ -61,14 +61,14 @@ const DashBoardPage = () => {
   if (!hasData) {
     return (
       <div className='min-h-screen'>
-        <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none' />
+        <div className='absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none' />
         <div className='relative max-w-7xl mx-auto'>
           {/* Header */}
           <div className='mb-6'>
-            <h1 className='text-2xl font-medium text-slate-900 tracking-light mb-2'>
+            <h1 className='text-2xl font-medium text-dark-100 tracking-light mb-2'>
               Dashboard
             </h1>
-            <p className='text-slate-500 text-sm'>
+            <p className='text-dark-400 text-sm'>
               Track your learning progress and activity
             </p>
           </div>
@@ -76,10 +76,10 @@ const DashBoardPage = () => {
           {/* Empty State */}
           <div className='flex flex-col items-center justify-center py-20'>
             <div className='w-20 h-20 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/25 mb-6'>
-              <TrendingUp className='w-10 h-10 text-white' />
+              <TrendingUp className="w-10 h-10 text-white" />
             </div>
-            <h3 className='text-xl font-semibold text-slate-900 mb-2'>Welcome to NeuroFlux!</h3>
-            <p className='text-slate-500 text-center max-w-md mb-8'>
+            <h3 className='text-xl font-semibold text-dark-100 mb-2'>Welcome to NeuroFlux!</h3>
+            <p className='text-dark-400 text-center max-w-md mb-8'>
               Start by uploading a document to create flashcards and quizzes powered by AI.
             </p>
             <Link 
@@ -150,14 +150,14 @@ const DashBoardPage = () => {
 
   return (
     <div className='min-h-screen'>
-      <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none' />
+      <div className='absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] bg-size-[16px_16px] opacity-30 pointer-events-none' />
       <div className='relative max-w-7xl mx-auto' >
         {/* Header */}
         <div className='mb-6'>
-          <h1 className='text-2xl font-medium text-slate-900 tracking-light mb-2'>
+          <h1 className='text-2xl font-medium text-dark-100 tracking-light mb-2'>
             Dashboard
           </h1>
-          <p className='text-slate-500 text-sm'>
+          <p className='text-dark-400 text-sm'>
             Track your learning progress and activity
           </p>
         </div>
@@ -168,17 +168,17 @@ const DashBoardPage = () => {
             <Link
               to={stat.link}
               key={index}
-              className='group relative bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-xl shadow-slate-200/50 p-6 hover:shadow-2xl hover:shadow-slate-300/50 transition-all duration-300 hover:-translate-y-1'
+              className='group relative bg-dark-800/80 backdrop-blur-xl border border-dark-700/60 rounded-2xl shadow-xl shadow-black/20 p-6 hover:shadow-2xl hover:border-dark-600 transition-all duration-300 hover:-translate-y-1'
             >
               <div className='flex items-center justify-between mb-4'>
-                <span className='text-xs font-semibold text-slate-500 uppercase tracking-wider'>
+                <span className='text-xs font-semibold text-dark-400 uppercase tracking-wider'>
                   {stat.label}
                 </span>
                 <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${stat.gradient} shadow-lg ${stat.shadowColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                   <stat.icon className='w-5 h-5 text-white' strokeWidth={2} />
                 </div>
               </div>
-              <div className='text-4xl font-bold text-slate-900 tracking-tight'>
+              <div className='text-4xl font-bold text-dark-100 tracking-tight'>
                 {stat.value}
               </div>
             </Link>
@@ -186,12 +186,12 @@ const DashBoardPage = () => {
         </div>
 
         {/* Recent activity section */}
-        <div className='bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-xl shadow-slate-200/50 p-6'>
+        <div className='bg-dark-800/80 backdrop-blur-xl border border-dark-700/60 rounded-2xl shadow-xl shadow-black/20 p-6'>
           <div className='flex items-center gap-3 mb-6'>
-            <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center'>
-              <Clock className='w-5 h-5 text-slate-600' strokeWidth={2} />
+            <div className='w-10 h-10 rounded-xl bg-dark-700 flex items-center justify-center'>
+              <Clock className='w-5 h-5 text-dark-300' strokeWidth={2} />
             </div>
-            <h3 className='text-xl font-medium text-slate-900 tracking-light'>
+            <h3 className='text-xl font-medium text-dark-100 tracking-light'>
               Recent Activity
             </h3>
           </div>
@@ -202,7 +202,7 @@ const DashBoardPage = () => {
                 <Link
                   to={activity.link}
                   key={activity.id || index}
-                  className='group flex items-center justify-between p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 hover:bg-white hover:border-slate-300/60 transition-all duration-200'
+                  className='group flex items-center justify-between p-4 rounded-xl bg-dark-800/50 border border-dark-700/60 hover:bg-dark-700 hover:border-dark-600 transition-all duration-200'
                 >
                   <div className='flex items-center gap-3 min-w-0'>
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
@@ -211,22 +211,22 @@ const DashBoardPage = () => {
                         : 'bg-gradient-to-br from-emerald-400 to-teal-600'
                     }`}>
                       {activity.type === 'document' ? (
-                        <FileText className='w-4 h-4 text-white' />
+                        <FileText className="w-4 h-4 text-white" />
                       ) : (
-                        <BrainCircuit className='w-4 h-4 text-white' />
+                        <BrainCircuit className="w-4 h-4 text-white" />
                       )}
                     </div>
                     <div className='min-w-0'>
-                      <p className='text-sm font-medium text-slate-900 truncate'>
+                      <p className='text-sm font-medium text-dark-100 truncate'>
                         {activity.title}
                       </p>
-                      <p className='text-xs text-slate-500'>
+                      <p className='text-xs text-dark-500'>
                         {activity.type === 'document' ? 'Document uploaded' : `Quiz completed - ${activity.score}/${activity.totalQuestions} questions`}
                       </p>
                     </div>
                   </div>
                   <div className='flex items-center gap-3 shrink-0'>
-                    <span className='text-xs text-slate-500'>
+                    <span className='text-xs text-dark-500'>
                       {activity.timestamp ? new Date(activity.timestamp).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -235,18 +235,18 @@ const DashBoardPage = () => {
                         minute: '2-digit'
                       }) : 'N/A'}
                     </span>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors" />
+                    <ArrowRight className="w-4 h-4 text-dark-500 group-hover:text-emerald-400 transition-colors" />
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
             <div className='text-center py-12'>
-              <div className='inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-100 mb-4'>
-                <Clock className='w-8 h-8 text-slate-400' />
+              <div className='inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-dark-700 mb-4'>
+                <Clock className="w-8 h-8 text-dark-500" />
               </div>
-              <p className='text-slate-500'>No recent activity yet.</p>
-              <p className='text-slate-400 text-sm mt-1'>Start learning to see your progress here</p>
+              <p className='text-dark-400'>No recent activity yet.</p>
+              <p className='text-dark-500 text-sm mt-1'>Start learning to see your progress here</p>
             </div>
           )}
         </div>

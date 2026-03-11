@@ -1,61 +1,64 @@
+
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { 
-  BookOpen, 
+  ClipboardList, 
   Plus, 
   FileText, 
   Clock,
   Play,
+  MoreVertical,
   Trash2,
   Eye,
-  Layers
+  Loader2,
+  CheckCircle,
+  XCircle,
+  BrainCircuit
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import flashcardService from '../../../services/flashcardService'
+import quizService from '../../../services/quizService'
 import Spinner from '../../../components/common/Spinner'
 import Button from '../../../components/common/Button'
 
-const FlashcardsListPage = () => {
-  const [flashcards, setFlashcards] = useState([])
+const QuizzesListPage = () => {
+  const [quizzes, setQuizzes] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [selectedFlashcard, setSelectedFlashcard] = useState(null)
+  const [selectedQuiz, setSelectedQuiz] = useState(null)
   const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
-    fetchFlashcards()
+    fetchQuizzes()
   }, [])
 
-  const fetchFlashcards = async () => {
+  const fetchQuizzes = async () => {
     try {
-      const response = await flashcardService.getAllFlashcardSets()
-      // Service returns { success: true, count: n, data: [...] }
-      // So response is already { success, count, data }
-      setFlashcards(response.data || [])
+      const response = await quizService.getAllQuizzes()
+      setQuizzes(response.data || [])
     } catch (error) {
-      toast.error('Failed to fetch flashcards')
+      toast.error('Failed to fetch quizzes')
       console.error(error)
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDeleteRequest = (flashcard) => {
-    setSelectedFlashcard(flashcard)
+  const handleDeleteRequest = (quiz) => {
+    setSelectedQuiz(quiz)
     setDeleteModalOpen(true)
   }
 
   const handleConfirmDelete = async () => {
-    if (!selectedFlashcard) return
+    if (!selectedQuiz) return
     setDeleting(true)
     try {
-      await flashcardService.deleteFlashcardSet(selectedFlashcard._id)
-      toast.success('Flashcard deleted successfully!')
-      setFlashcards(flashcards.filter(f => f._id !== selectedFlashcard._id))
+      await quizService.deleteQuiz(selectedQuiz._id)
+      toast.success('Quiz deleted successfully!')
+      setQuizzes(quizzes.filter(q => q._id !== selectedQuiz._id))
       setDeleteModalOpen(false)
-      setSelectedFlashcard(null)
+      setSelectedQuiz(null)
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Failed to delete flashcard')
+      toast.error(error.response?.data?.error || 'Failed to delete quiz')
     } finally {
       setDeleting(false)
     }
@@ -68,6 +71,12 @@ const FlashcardsListPage = () => {
       day: 'numeric',
       year: 'numeric'
     })
+  }
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-500'
+    if (score >= 60) return 'text-yellow-500'
+    return 'text-red-500'
   }
 
   if (loading) {
@@ -84,10 +93,10 @@ const FlashcardsListPage = () => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-medium text-dark-100 tracking-tight mb-2">
-              My Flashcards
+              My Quizzes
             </h1>
             <p className="text-dark-400 text-sm">
-              Review and study your flashcard decks
+              Review and take your quizzes
             </p>
           </div>
           <Link to="/documents">
@@ -98,22 +107,22 @@ const FlashcardsListPage = () => {
           </Link>
         </div>
 
-        {/* Flashcards Grid */}
-        {flashcards.length > 0 ? (
+        {/* Quizzes Grid */}
+        {quizzes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {flashcards.map((flashcard, index) => (
+            {quizzes.map((quiz, index) => (
               <div 
-                key={flashcard._id || index}
-                className="group glass-card p-6 hover:shadow-xl hover:border-dark-600 transition-all duration-300 hover:-translate-y-1"
+                key={quiz._id || index}
+                className="group glass-card p-6 hover:shadow-xl hover:border-dark-500 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform">
-                    <BookOpen className="w-6 h-6 text-white" strokeWidth={2} />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                    <BrainCircuit className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <button
-                    onClick={() => handleDeleteRequest(flashcard)}
-                    className="p-2 rounded-lg text-dark-500 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                    onClick={() => handleDeleteRequest(quiz)}
+                    className="p-2 rounded-lg text-dark-400 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-200"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -122,41 +131,66 @@ const FlashcardsListPage = () => {
                 {/* Content */}
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-dark-100 mb-2 line-clamp-2">
-                    {flashcard.title || flashcard.documentTitle || 'Untitled Flashcards'}
+                    {quiz.title || 'Untitled Quiz'}
                   </h3>
                   <div className="flex items-center gap-4 text-sm text-dark-400">
                     <span className="inline-flex items-center gap-1.5">
-                      <Layers className="w-4 h-4" />
-                      {flashcard.cards?.length || flashcard.cardCount || 0} cards
+                      <FileText className="w-4 h-4" />
+                      {quiz.totalQuestions || quiz.questions?.length || 0} questions
                     </span>
                     <span className="inline-flex items-center gap-1.5">
                       <Clock className="w-4 h-4" />
-                      {formatDate(flashcard.createdAt)}
+                      {formatDate(quiz.createdAt)}
                     </span>
                   </div>
                 </div>
 
                 {/* Source Document */}
-                {flashcard.documentId && (
+                {quiz.documentId && (
                   <div className="mb-4 p-3 rounded-xl bg-dark-900/50 border border-dark-700">
                     <div className="flex items-center gap-2 text-sm text-dark-400">
                       <FileText className="w-4 h-4" />
-                      <span className="truncate">{flashcard.documentTitle || 'Source Document'}</span>
+                      <span className="truncate">{quiz.documentId.title || 'Source Document'}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Score Status */}
+                {quiz.completedAt ? (
+                  <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-emerald-400">Completed</span>
+                      <span className={`text-lg font-bold ${getScoreColor(quiz.score)}`}>
+                        {quiz.score}%
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                    <div className="flex items-center gap-2 text-sm text-yellow-400">
+                      <Clock className="w-4 h-4" />
+                      Not completed
                     </div>
                   </div>
                 )}
 
                 {/* Actions */}
                 <div className="flex gap-2 pt-4 border-t border-dark-700">
-                  <Link to={`/documents/${flashcard.documentId?._id || flashcard.documentId}/flashcards`} className="flex-1">
-                    <Button className="w-full">
-                      <Play className="w-4 h-4" />
-                      Study
-                    </Button>
-                  </Link>
-                  <button className="p-2.5 rounded-xl bg-dark-700 text-dark-300 hover:bg-dark-600 transition-all">
-                    <Eye className="w-4 h-4" />
-                  </button>
+                  {quiz.completedAt ? (
+                    <Link to={`/quizzes/${quiz._id}/results`} className="flex-1">
+                      <Button className="w-full">
+                        <Eye className="w-4 h-4" />
+                        View Results
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to={`/quizzes/${quiz._id}`} className="flex-1">
+                      <Button className="w-full">
+                        <Play className="w-4 h-4" />
+                        Take Quiz
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
@@ -164,17 +198,17 @@ const FlashcardsListPage = () => {
         ) : (
           /* Empty State */
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-20 h-20 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-4">
-              <BookOpen className="w-10 h-10 text-purple-400" strokeWidth={1.5} />
+            <div className="w-20 h-20 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-4">
+              <ClipboardList className="w-10 h-10 text-emerald-400" strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-semibold text-dark-100 mb-2">No flashcards yet</h3>
+            <h3 className="text-lg font-semibold text-dark-100 mb-2">No quizzes yet</h3>
             <p className="text-dark-400 text-center max-w-sm mb-6">
-              Create flashcards from your documents to start studying with AI-powered learning.
+              Create quizzes from your documents to test your knowledge with AI-powered questions.
             </p>
             <Link to="/documents">
               <Button>
                 <Plus className="w-4 h-4" strokeWidth={2.5} />
-                Create Your First Flashcards
+                Create Your First Quiz
               </Button>
             </Link>
           </div>
@@ -188,9 +222,9 @@ const FlashcardsListPage = () => {
                 <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
                   <Trash2 className="w-8 h-8 text-red-400" />
                 </div>
-                <h2 className="text-xl font-semibold text-dark-100 mb-2">Delete Flashcards?</h2>
+                <h2 className="text-xl font-semibold text-dark-100 mb-2">Delete Quiz?</h2>
                 <p className="text-dark-400 mb-6">
-                  Are you sure you want to delete "{selectedFlashcard?.title}"? This action cannot be undone.
+                  Are you sure you want to delete "{selectedQuiz?.title}"? This action cannot be undone.
                 </p>
                 <div className="flex gap-3">
                   <Button 
@@ -206,7 +240,14 @@ const FlashcardsListPage = () => {
                     disabled={deleting}
                     className="flex-1"
                   >
-                    {deleting ? 'Deleting...' : 'Delete'}
+                    {deleting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Deleting...
+                      </>
+                    ) : (
+                      'Delete'
+                    )}
                   </Button>
                 </div>
               </div>
@@ -218,5 +259,5 @@ const FlashcardsListPage = () => {
   )
 }
 
-export default FlashcardsListPage
+export default QuizzesListPage
 

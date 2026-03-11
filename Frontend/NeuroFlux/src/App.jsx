@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router,Routes,Route,Navigate} from 'react-router-dom';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
+import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 import NotFoundPage from './pages/Auth/NotFoundPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import DashBoardPage from './pages/Auth/Dashboard/DashboardPage';
@@ -9,6 +10,7 @@ import DocumentListPage from './pages/Auth/Documents/DocumentListPage';
 import DocumentDetailsPage from './pages/Auth/Documents/DocumentDetailsPage';
 import FlashcardsListPage from './pages/Auth/Flashcards/FlashcardsListPage';
 import FlashcardPage from './pages/Auth/Flashcards/FlashcardPage';
+import QuizzesListPage from './pages/Auth/Quizzes/QuizzesListPage';
 import QuizTakePage from './pages/Auth/Quizzes/QuizTakePage';
 import QuizResultPage from './pages/Auth/Quizzes/QuizResultPage';
 import ProfilePage from './pages/Auth/Profile/ProfilePage';
@@ -35,6 +37,7 @@ const App = () => {
 
         <Route path='/login' element={<LoginPage />}/>
         <Route path='/register' element={<RegisterPage />}/>
+        <Route path='/forgot-password' element={<ForgotPasswordPage />}/>
 
 
         {/* Proteced Routes  */}
@@ -45,6 +48,7 @@ const App = () => {
         <Route path='/documents/:id' element={<DocumentDetailsPage/> }/>
         <Route path='/flashcards' element={<FlashcardsListPage/> }/>
         <Route path='/documents/:id/flashcards' element={<FlashcardPage/> }/>
+        <Route path='/quizzes' element={<QuizzesListPage/> }/>
         <Route path='/quizzes/:quizId' element={<QuizTakePage/> }/>
         <Route path='/quizzes/:quizId/results' element={<QuizResultPage/> }/>
         <Route path='/profile' element={<ProfilePage/> }/>

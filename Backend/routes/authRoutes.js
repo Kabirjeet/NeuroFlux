@@ -5,7 +5,8 @@ import {
     login,
     getProfile,
     updateProfile,
-    changePassword
+    changePassword,
+    forgotPassword
 } from '../controllers/authController.js';
 import protect from '../middleware/auth.js';
 
@@ -39,6 +40,7 @@ const loginValidation = [
 // Public routes
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
+router.post('/forgot-password', forgotPassword);
 
 // Protected routes
 router.get('/profile', protect, getProfile);

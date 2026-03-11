@@ -7,6 +7,7 @@ export const API_PATHS = {
         GET_PROFILE: "/api/auth/profile",
         UPDATE_PROFILE: "/api/auth/profile",
         CHANGE_PASSWORD: "/api/auth/change-password",
+        FORGOT_PASSWORD: "/api/auth/forgot-password",
     },
 
     DOCUMENTS: {
@@ -29,15 +30,16 @@ export const API_PATHS = {
     FLASHCARDS: {
         GET_ALL_FLASHCARD_SETS: "/api/flashcards",
         GET_FLASHCARDS_FOR_DOC: (documentId) => `/api/flashcards/document/${documentId}`,
-        REVIEW_FLASHCARD: (cardId) => `/api/flashcards/review/${cardId}/review`,
+        REVIEW_FLASHCARD: (cardId) => `/api/flashcards/${cardId}/review`,
         TOGGLE_STAR: (cardId) => `/api/flashcards/${cardId}/star`,
-        DELETE_FLASHCARD_SET: (id) => `/api/flashcards/set/${id}`,
+        DELETE_FLASHCARD_SET: (id) => `/api/flashcards/${id}`,
     },
 
     QUIZZES: {
-        GET_QUIZZES_FOR_DOC: (documentId) => `/api/quizzes/document/${documentId}`,
+        GET_ALL_QUIZZES: "/api/quizzes",
+        GET_QUIZZES_FOR_DOC: (documentId) => `/api/quizzes/${documentId}`,
         SUBMIT_QUIZ: (quizId) => `/api/quizzes/${quizId}/submit`,
-        GET_QUIZ_BY_ID: (id) => `/api/quizzes/${id}`,
+        GET_QUIZ_BY_ID: (id) => `/api/quizzes/quiz/${id}`,
         GET_QUIZ_RESULTS: (id) => `/api/quizzes/${id}/results`,
         DELETE_QUIZ: (id) => `/api/quizzes/${id}`,
     },

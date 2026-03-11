@@ -1,5 +1,26 @@
 import Quiz from '../models/Quiz.js';
 
+// @desc Get all quizzes for the user
+// @route GET /api/quizzes
+// @access Private
+export const getAllQuizzes = async (req, res,next) => {
+    try {
+        const quizzes = await Quiz.find({
+            userId: req.user._id
+        })
+          .populate('documentId', 'title fileName')
+          .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            data: quizzes
+        });
+
+    }catch (error) {
+        next(error);
+    }
+};
+
 // @desc Get all quizzes for a document
 // @route GET /api/quizzes/:documentId
 // @access Private

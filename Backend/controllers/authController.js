@@ -242,3 +242,44 @@ export const changePassword = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Forgot password - send reset email
+// @route   POST /api/auth/forgot-password
+// @access  Public
+export const forgotPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                error: 'Please provide an email address',
+                statusCode: 400,
+            });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            // Don't reveal if user exists or not
+            return res.status(200).json({
+                success: true,
+                message: 'If an account exists with this email, a password reset link has been sent',
+            });
+        }
+
+        // Generate reset token (in production, send via email)
+        // For now, we'll just return success
+        // In a real app, you'd use something like:
+        // const resetToken = crypto.randomBytes(32).toString('hex');
+        // await sendResetEmail(user.email, resetToken);
+
+        res.status(200).json({
+            success: true,
+            message: 'If an account exists with this email, a password reset link has been sent',
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};

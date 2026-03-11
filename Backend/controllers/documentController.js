@@ -36,7 +36,7 @@ export const uploadDocument = async(req, res, next) =>{
         // Construct the URL for the uploaded file
 
         const baseURL = `http://localhost:${process.env.PORT || 8000}`;
-        const fileURL = `${baseURL}/uploads/documents${req.file.filename}`;
+        const fileURL = `${baseURL}/uploads/documents/${req.file.filename}`;
 
         // Create document record 
 
@@ -226,13 +226,17 @@ export const deleteDocument = async(req, res, next) =>{
             });
         }
 
-        // Delete file from filesystem
+        // Delete file from filesystem - extract local path from the URL
+        const fileURL = document.filePath;
+        const uploadsIndex = fileURL.indexOf('/uploads/documents/');
+        if (uploadsIndex !== -1) {
+            const filename = fileURL.substring(uploadsIndex + '/uploads/documents/'.length);
+            const localPath = `uploads/documents/${filename}`;
+            await fs.unlink(localPath).catch(()=>{});
+        }
 
-        await fs.unlink(document.filePath).catch(()=>{});
-
-        // Delete document
-
-        await Document.deleteOne();
+        // Delete document from database
+        await Document.deleteOne({ _id: document._id });
 
         res.status(200).json({
             success : true,
