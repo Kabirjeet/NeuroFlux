@@ -38,7 +38,7 @@ const QuizResultPage = () => {
   const fetchResults = async () => {
     try {
       const data = await quizService.getQuizResults(quizId)
-      setResults(data.results)
+      setResults(data.data?.results || [])
     } catch (error) {
       toast.error('Failed to load quiz results')
       console.error(error)
@@ -104,11 +104,11 @@ const QuizResultPage = () => {
         {/* Header */}
         <div className="mb-8">
           <button 
-            onClick={() => navigate('/documents')}
+          onClick={() => navigate('/quizzes')}
             className="inline-flex items-center gap-2 text-dark-400 hover:text-dark-100 mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Documents
+            Back to Quizzes
           </button>
         </div>
 

@@ -55,9 +55,9 @@ const DocumentCard = ({ document, onDelete }) => {
           <Eye className="w-4 h-4" />
           View
         </button>
-        {document.fileUrl && (
+{document.filePath && (
           <a 
-            href={document.fileUrl} 
+            href={document.filePath} 
             target="_blank" 
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}

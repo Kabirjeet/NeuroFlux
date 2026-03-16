@@ -154,7 +154,10 @@ const FlashcardsListPage = () => {
                       Study
                     </Button>
                   </Link>
-                  <button className="p-2.5 rounded-xl bg-dark-700 text-dark-300 hover:bg-dark-600 transition-all">
+                  <button 
+                    onClick={() => navigate(`/documents/${flashcard.documentId}`)}
+                    className="p-2.5 rounded-xl bg-dark-700 text-dark-300 hover:bg-dark-600 transition-all"
+                    title="View flashcards in document">
                     <Eye className="w-4 h-4" />
                   </button>
                 </div>
