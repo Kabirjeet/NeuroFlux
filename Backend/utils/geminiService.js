@@ -17,7 +17,7 @@ if(!process.env.GEMINI_API_KEY) {
  * @param {number} count - number of flashcards to generate
  * @returns {Promise<Array<{question: string, answer: string, difficulty: string}>>}
  */
-export const generateFlashcards = async (text, count = 10) => {
+export const generateFlashcards = async (text, count = 30) => {
     const prompt = `Generate exactly ${count} educational flashcards from the following text.
     Format each flashcard as:
     Q: [Clear, specific question]
@@ -77,7 +77,7 @@ export const generateFlashcards = async (text, count = 10) => {
  * @param {number} numQuestions - Number of questions
  * @param {Promise<Array<{question: string, options: Array, correctAnswer: string, explanation: string, difficulty: string}>>}
  */
-export const generateQuiz = async (text, numQuestions = 5) => {
+export const generateQuiz = async (text, numQuestions = 20) => {
     const prompt = `Generate exactly ${numQuestions} multiple choice questions from the following text.
     Format each question as:
     Q: [Question]
