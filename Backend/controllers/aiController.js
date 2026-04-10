@@ -151,6 +151,10 @@ export const generateSummary = async(req, res, next) =>{
 
         //Generate Summary using Gemini
         const summary = await geminiService.generateSummary(document.extractedText);
+        
+        // Persist summary to document
+        document.summary = summary;
+        await document.save();
 
         res.status(200).json({
             success: true,

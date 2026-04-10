@@ -53,6 +53,10 @@ const documentSchema = new mongoose.Schema({
         type: String,
         enum: ['processing', 'ready', 'failed'],
         default: 'processing'
+    },
+    summary: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true

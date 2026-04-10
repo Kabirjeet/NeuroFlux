@@ -14,6 +14,8 @@ import QuizzesListPage from './pages/Auth/Quizzes/QuizzesListPage';
 import QuizTakePage from './pages/Auth/Quizzes/QuizTakePage';
 import QuizResultPage from './pages/Auth/Quizzes/QuizResultPage';
 import ProfilePage from './pages/Auth/Profile/ProfilePage';
+import DocumentSummaryPage from './pages/Auth/Documents/DocumentSummaryPage';
+import DocumentChatPage from './pages/Auth/Documents/DocumentChatPage';
 import { useAuth } from './context/AuthContext';
 
 const App = () => {
@@ -46,6 +48,8 @@ const App = () => {
         <Route path='/dashboard' element={<DashBoardPage/> }/>
         <Route path='/documents' element={<DocumentListPage/> }/>
         <Route path='/documents/:id' element={<DocumentDetailsPage/> }/>
+        <Route path='/documents/:id/summary' element={<DocumentSummaryPage/> }/>
+        <Route path='/documents/:id/chat' element={<DocumentChatPage/> }/>
         <Route path='/flashcards' element={<FlashcardsListPage/> }/>
         <Route path='/documents/:id/flashcards' element={<FlashcardPage/> }/>
         <Route path='/quizzes' element={<QuizzesListPage/> }/>

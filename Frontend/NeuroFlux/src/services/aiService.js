@@ -30,8 +30,8 @@ const generateQuiz = async (documentId, options) => {
 
 const chat = async (documentId, message) => {
     try {
-        const response = await axiosInstance.post(API_PATHS.AI.CHAT, { documentId,question: message });
-        return response.data;
+        const response = await axiosInstance.post(API_PATHS.AI.CHAT, { documentId, question: message });
+        return response.data.data; // Backend returns data.answer, data.relevantChunks
     } catch (error) {
         throw error.response?.data || { message: "Failed to send message" };
     }
@@ -49,10 +49,9 @@ const explainConcept = async (documentId, concept) => {
 const getChatHistory = async (documentId) => {
     try {
         const response = await axiosInstance.get(API_PATHS.AI.GET_CHAT_HISTORY(documentId));    
-        return response.data;
-
+        return response.data.success ? response.data.data : [];
     } catch (error) {
-        throw error.response?.data || { message: "Failed to fetch chat history" };
+        return []; // Gracefully handle no history
     }
 };
 

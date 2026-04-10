@@ -6,6 +6,7 @@ import {
   Download, 
   BookOpen, 
   BrainCircuit, 
+  Check, 
   Clock, 
   Loader2,
   File,
@@ -28,7 +29,7 @@ const DocumentDetailsPage = () => {
   const [generatingQuiz, setGeneratingQuiz] = useState(false)
   const [generatingSummary, setGeneratingSummary] = useState(false)
   const [summary, setSummary] = useState(null)
-  const [loadingSummary, setLoadingSummary] = useState(false)
+  const [showFullSummary, setShowFullSummary] = useState(false)
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -53,8 +54,7 @@ const DocumentDetailsPage = () => {
     setGeneratingFlashcards(true)
     try {
       const response = await aiService.generateFlashcards(id)
-      toast.success('Flashcards generated successfully!')
-      toast.success('Flashcards generated successfully!')
+  toast.success('Flashcards generated successfully!')
       navigate(`/documents/${id}/flashcards`)
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to generate flashcards')
@@ -81,7 +81,7 @@ const DocumentDetailsPage = () => {
     try {
       const response = await aiService.generateSummary(id)
       setSummary(response.summary || response.data?.summary || 'Summary generated successfully!')
-      toast.success('Summary generated!')
+      toast.success('Summary generated and saved to document!')
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to generate summary')
     } finally {
@@ -296,12 +296,12 @@ const DocumentDetailsPage = () => {
                     {generatingSummary ? (
                       <>
                         <Loader2 className="w-3 h-3 animate-spin" />
-                        <span className="text-xs">Generate Summary</span>
+                        <span className="text-xs">Generating...</span>
                       </>
-                    ) : summary ? (
+                    ) : document.summary ? (
                       <>
                         <Check className="w-3 h-3" />
-                        <span className="text-xs">Summary Ready</span>
+                        <span className="text-xs">View Summary</span>
                       </>
                     ) : (
                       <>
@@ -310,41 +310,9 @@ const DocumentDetailsPage = () => {
                       </>
                     )}
                   </Button>
-                  {(summary || loadingSummary) && (
-                    <div className="mt-2">
-                      <Button 
-                        size="sm"
-                        onClick={async () => {
-                          setLoadingSummary(true)
-                          try {
-                            const response = await aiService.generateSummary(id)
-                            setSummary(response.summary || response.data?.summary)
-                          } catch (error) {
-                            toast.error('Failed to load summary')
-                          } finally {
-                            setLoadingSummary(false)
-                          }
-                        }}
-                        disabled={loadingSummary}
-                        className="w-full text-xs"
-                        variant="outline"
-                      >
-                        {loadingSummary ? (
-                          <>
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                            <span className="text-xs">Loading...</span>
-                          </>
-                        ) : (
-                          <>
-                            👁️ View Summary
-                          </>
-                        )}
-                      </Button>
-                      {summary && (
-                        <div className="mt-1 p-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded text-xs max-h-16 overflow-y-auto">
-                          <p className="text-dark-100 line-clamp-4">{summary}</p>
-                        </div>
-                      )}
+                  {document.summary && (
+                    <div className="text-xs text-emerald-400 mt-2 text-center">
+                      Summary generated! <Button variant="link" size="sm" onClick={() => navigate(`/documents/${id}/summary`)} className="h-auto p-0 -ml-1 text-emerald-400 hover:text-emerald-300 text-xs">View full summary →</Button>
                     </div>
                   )}
                 </div>
@@ -368,7 +336,7 @@ const DocumentDetailsPage = () => {
                     className="w-full"
                   >
                     <MessageSquare className="w-3 h-3" />
-                    <span className="text-xs">Start Chat</span>
+                    <span className="text-xs">Open Chat</span>
                   </Button>
                 </div>
               </div>
