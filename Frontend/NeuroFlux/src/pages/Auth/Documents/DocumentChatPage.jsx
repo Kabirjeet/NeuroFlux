@@ -121,8 +121,8 @@ const DocumentChatPage = () => {
         {/* Header */}
         <div className="glass-card p-6 border-b border-dark-700 sticky top-0 z-10 backdrop-blur-xl bg-dark-900/80">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate(`/documents/${id}`)} size="sm" className="h-10 w-10 p-0">
-              <ArrowLeft className="w-5 h-5" />
+            <Button variant="ghost" onClick={() => navigate(`/documents/${id}`)} size="icon" className="h-10 w-10 p-0">
+              <ArrowLeft className="w-10 h-10" />
             </Button>
             <div className="flex-1 min-w-0">
               <h1 className="text-xl font-bold text-dark-100 truncate">Chat with {document?.title}</h1>
@@ -225,7 +225,7 @@ const DocumentChatPage = () => {
               }}
             />
             <Button 
-              size="lg" 
+              size="icon" 
               onClick={sendMessage}
               disabled={isLoading || !inputMessage.trim()}
               className="h-12 w-12 p-0 rounded-2xl shadow-lg hover:shadow-emerald-500/25 group"
