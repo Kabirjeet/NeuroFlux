@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import {useAuth} from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { LayoutDashboard, FileText, User, LogOut, BrainCircuit, BookOpen, X, ClipboardList } from 'lucide-react';
 
 const Sidebar = ({ isOpen, toggle }) => {
@@ -25,25 +25,23 @@ const Sidebar = ({ isOpen, toggle }) => {
     <>
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity duration-300 ${
-          isOpen
+        className={`fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity duration-300 ${isOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
-        }`}
+          }`}
         onClick={toggle}
         aria-hidden="true"
       ></div>
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-dark-900/95 backdrop-blur-lg border-r border-dark-700/60 z-50 transform transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`fixed top-0 left-0 h-full w-64 bg-dark-900/95 backdrop-blur-lg border-r border-dark-700/60 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
 
         {/* Logo and Close Button */}
         <div className='flex items-center justify-between p-4 border-b border-dark-700/60'>
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-3 cursor-pointer' onClick={() => navigate('/dashboard')}>
             <div className='w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30'>
               <BrainCircuit size={20} strokeWidth={2.5} className='text-white' />
             </div>
@@ -70,10 +68,9 @@ const Sidebar = ({ isOpen, toggle }) => {
                 }
               }}
               className={({ isActive }) =>
-                `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
-                    : 'text-dark-400 hover:bg-dark-800 hover:text-dark-100'
+                `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
+                  : 'text-dark-400 hover:bg-dark-800 hover:text-dark-100'
                 }`
               }
             >
@@ -82,11 +79,10 @@ const Sidebar = ({ isOpen, toggle }) => {
                   <link.icon
                     size={20}
                     strokeWidth={2}
-                    className={`transition-transform duration-200 ${
-                      isActive
+                    className={`transition-transform duration-200 ${isActive
                         ? 'group-hover:scale-110'
                         : 'group-hover:translate-x-1'
-                    }`}
+                      }`}
                   />
                   <span className='font-medium'>{link.text}</span>
                 </>
