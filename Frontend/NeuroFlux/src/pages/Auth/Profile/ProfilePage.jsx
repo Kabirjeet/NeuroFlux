@@ -24,7 +24,7 @@ import authService from '../../../services/authService'
 import Button from '../../../components/common/Button'
 
 const ProfilePage = () => {
-  const { user, logout } = useAuth()
+  const { user, logout, updateUser } = useAuth()
   const { darkMode, toggleDarkMode } = useTheme()
   const [activeTab, setActiveTab] = useState('profile')
   const [loading, setLoading] = useState(false)
@@ -42,14 +42,16 @@ const ProfilePage = () => {
   const [notifications, setNotifications] = useState(true)
   const [emailUpdates, setEmailUpdates] = useState(false)
 
-  const handleUpdateProfile = async (e) => {
+const handleUpdateProfile = async (e) => {
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await authService.updateProfile({ name, email })
+      const userData = { username: name, email }
+      const response = await authService.updateProfile(userData)
       toast.success('Profile updated successfully!')
-      // Update the user in context
+      // Update global user context
       if (response.data) {
+        updateUser(response.data)
         // Update local state with returned data
         setName(response.data.username || name)
         setEmail(response.data.email || email)

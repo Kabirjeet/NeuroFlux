@@ -134,7 +134,7 @@ export const generateQuiz = async (text, numQuestions = 20) => {
 
         return questions.slice(0, numQuestions);
     } catch (error) {
-        console.error('Gemini API error:', error);
+        console.error('Gemini API error', error);
         throw new Error('Failed to generate quiz');
     }
 };
@@ -156,8 +156,8 @@ export const generateSummary = async (text) => {
             model: "gemini-2.5-flash-lite",
             contents: prompt,
         });
-        const generateText = response.text;
-        return generateText
+        const generatedText = response.text;
+        return generatedText
     } catch (error) {
         console.error('Gemini API error:', error);
         throw new Error('Failed to generate summary');
@@ -199,7 +199,7 @@ export const chatWithContext = async (question, chunks) => {
 /**
  * Explain a specific concept
  * @param {string} concept - Concept to explain
- * @param {String} contact - Relevant context
+ * @param {String} context - Relevant context
  * @returns {Promise<string>}
  */
 export const explainConcept = async (concept, context) => {
@@ -220,5 +220,52 @@ export const explainConcept = async (concept, context) => {
     } catch (error) {
         console.error('Gemini API error', error);
         throw new Error('Failed to explain concept');
+    }
+};
+
+/**
+ * Extract term-definition pairs for Concept Clash game from PDF/document chunks
+ */
+export const extractTermDefinitionPairs = async (text, numPairs = 10) => {
+    const prompt = `Extract EXACTLY ${numPairs} key TERM-DEFINITION pairs from this document text for a matching memory game.
+    
+RULES:
+- TERM: Key concept (1-5 words)
+- DEF: Precise 1-sentence definition
+- Educational, from content only
+- No duplicates, no filler
+
+FORMAT:
+TERM: [term]
+DEF: [definition]
+
+--- between pairs ONLY.
+
+Text:
+${text.substring(0, 25000)}`;
+
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash-lite",
+            contents: prompt,
+        });
+        const generatedText = response.text;
+        const pairs = [];
+        const blocks = generatedText.split('---').filter(b => b.trim());
+        for (const block of blocks) {
+            const lines = block.split('\n').map(l => l.trim());
+            let term = '', definition = '';
+            lines.forEach(line => {
+                if (line.startsWith('TERM:')) term = line.substring(5).trim();
+                if (line.startsWith('DEF:')) definition = line.substring(4).trim();
+            });
+            if (term && definition) {
+                pairs.push({ term, definition });
+            }
+        }
+        return pairs.slice(0, numPairs);
+    } catch (error) {
+        console.error('Gemini concept extraction error:', error);
+        throw new Error('Failed to generate concept pairs');
     }
 };
