@@ -70,6 +70,7 @@ app.use((req, res) => {
 // Create HTTP server for Socket.IO compatibility
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import initGameHandlers from './games/index.js';
 
 const httpServer = createServer(app);
 

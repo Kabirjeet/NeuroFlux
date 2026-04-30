@@ -1,5 +1,4 @@
 import { io } from 'socket.io-client';
-import { useAuth } from '../context/AuthContext.jsx';
 
 /**
  * Socket.IO Service for NeuroFlux Games
@@ -22,15 +21,20 @@ class SocketService {
     });
 
     return new Promise((resolve, reject) => {
-      this.socket.on('connect', () => {
+      const handleConnect = () => {
+        this.socket.off('connect_error', handleConnectError);
         console.log('Socket connected:', this.socket.id);
         resolve(this.socket);
-      });
+      };
 
-      this.socket.on('connect_error', (err) => {
+      const handleConnectError = (err) => {
+        this.socket.off('connect', handleConnect);
         console.error('Socket connection error:', err);
         reject(err);
-      });
+      };
+
+      this.socket.once('connect', handleConnect);
+      this.socket.once('connect_error', handleConnectError);
     });
   }
 
@@ -44,12 +48,7 @@ class SocketService {
   getSocket() {
     return this.socket;
   }
-
-  selectGame(gameName) {
-    this.socket?.emit('selectGame', gameName);
-  }
 }
 
 export const socketService = new SocketService();
 export default socketService;
-

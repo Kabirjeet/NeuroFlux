@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMultiplayer } from '../common/MultiplayerManager';
 import * as utils from './utils.js';
-import socketService from '../../services/socketService';
 
 /**
  * MindSnap Game Component
@@ -15,7 +14,7 @@ const MindSnapGame = () => {
 
   useEffect(() => {
     selectGame('mindSnap');
-  }, []);
+  }, [selectGame]);
 
   const generateNewEquation = () => {
     const eq = utils.generateEquation();
@@ -26,12 +25,6 @@ const MindSnapGame = () => {
   const handleAnswer = () => {
     const correct = utils.calculateAnswer(equation);
     const isCorrect = utils.validateAnswer(parseFloat(answer), correct);
-    
-    socketService.getSocket()?.emit('mindSnapAnswer', {
-      answer: parseFloat(answer),
-      timeTaken: 5000,
-      correct: isCorrect
-    });
 
     if (isCorrect) {
       setScore(score + 10);
@@ -64,4 +57,3 @@ const MindSnapGame = () => {
 };
 
 export default MindSnapGame;
-

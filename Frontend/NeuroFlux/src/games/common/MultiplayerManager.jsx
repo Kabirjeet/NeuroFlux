@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import socketService from '../../services/socketService';
-import { useAuth } from '../../context/AuthContext';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import useMultiplayerGame from '../../hooks/useMultiplayerGame';
 
 /**
  * Multiplayer Context Manager
@@ -17,52 +16,17 @@ export const useMultiplayer = () => {
 };
 
 export const MultiplayerProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
-  const [currentRoom, setCurrentRoom] = useState(null);
-  const [players, setPlayers] = useState([]);
-  const { token } = useAuth();
+  const [selectedGame, setSelectedGame] = useState(null);
+  const multiplayer = useMultiplayerGame();
 
-  useEffect(() => {
-    let connectedSocket;
-
-    const initSocket = async () => {
-      if (token) {
-        try {
-          connectedSocket = await socketService.connect(token);
-          setSocket(connectedSocket);
-        } catch (error) {
-          console.error('Failed to connect socket:', error);
-        }
-      }
-    };
-
-    initSocket();
-
-    return () => {
-      if (connectedSocket) {
-        socketService.disconnect();
-      }
-    };
-  }, [token]);
-
-  const joinRoom = (gameName, playerData) => {
-    socket?.emit('joinGameRoom', { 
-      gameName, 
-      playerData,
-      roomId: `room_${gameName}_${Date.now()}` 
-    });
-  };
-
-  const selectGame = (gameName) => {
-    socketService.selectGame(gameName);
-  };
+  const selectGame = useCallback((gameName) => {
+    setSelectedGame(gameName);
+  }, []);
 
   return (
     <MultiplayerContext.Provider value={{
-      socket,
-      currentRoom,
-      players,
-      joinRoom,
+      ...multiplayer,
+      selectedGame,
       selectGame
     }}>
       {children}
