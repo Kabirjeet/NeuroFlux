@@ -19,8 +19,6 @@ const Sidebar = ({ isOpen, toggle }) => {
     { to: '/flashcards', icon: BookOpen, text: 'Flashcards' },
     { to: '/quizzes', icon: ClipboardList, text: 'Quizzes' },
     { to: '/profile', icon: User, text: 'Profile' },
-    { to: '/games', icon: BrainCircuit, text: 'Games' },
-{ to: '/leaderboard', icon: Trophy, text: 'Leaderboard' },
   ];
 
   return (
